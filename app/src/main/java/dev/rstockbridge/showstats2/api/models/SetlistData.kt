@@ -4,17 +4,17 @@ import com.squareup.moshi.Json
 import kotlin.math.ceil
 
 data class SetlistData(
-    @Json(name = "setlist")
-    val setlists: List<Setlist>,
+    @field:Json(name = "setlist")
+    val shows: List<Show>,
     private val itemsPerPage: Int,
-    @Json(name = "total")
+    @field:Json(name = "total")
     private val numberOfSetlists: Int
 ) {
     val numberOfPages: Int
         get() = ceil((numberOfSetlists.toDouble()) / (itemsPerPage.toDouble())).toInt()
 }
 
-data class Setlist(
+data class Show(
     val eventDate: String,
     val artist: SetlistArtist,
     val venue: SetlistVenue,
