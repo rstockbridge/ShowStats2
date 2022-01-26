@@ -9,6 +9,7 @@ import dev.rstockbridge.showstats2.api.models.Show
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -18,9 +19,15 @@ class ListOfShowsViewModel(
     private val dataFetcher: DataFetcher
 ) : ViewModel() {
 
+    data class UserMessage(
+        val uniqueId: String = UUID.randomUUID().toString(),
+        val message: String
+    )
+
     data class ListOfShowsViewState(
         val shows: List<Show>?,
-        val networkCallInProgress: Boolean
+        val networkCallInProgress: Boolean,
+        val userMessages: List<UserMessage> = emptyList()
     )
 
     sealed class ListOfShowsResponse {
@@ -33,16 +40,23 @@ class ListOfShowsViewModel(
 
     fun onResume() {
         viewModelScope.launch {
-            _viewState.value = ListOfShowsViewState(null, true)
-
             when (val response = fetchData()) {
                 is ListOfShowsResponse.Success -> {
-                    _viewState.value = ListOfShowsViewState(response.listOfShows, false)
+                    _viewState.update { currentViewState ->
+                        currentViewState.copy(
+                            shows = response.listOfShows,
+                            networkCallInProgress = false
+                        )
+                    }
                 }
                 ListOfShowsResponse.Error -> {
-                    _viewState.value = ListOfShowsViewState(
-                        null, false
-                    )
+                    _viewState.update { currentViewState ->
+                        currentViewState.copy(
+                            shows = null,
+                            networkCallInProgress = false,
+                            userMessages = currentViewState.userMessages + UserMessage(message = "Something has gone wrong!")
+                        )
+                    }
                 }
             }
         }
@@ -73,6 +87,13 @@ class ListOfShowsViewModel(
             } else {
                 return@withContext ListOfShowsResponse.Error
             }
+        }
+    }
+
+    fun userMessageShown(messageId: String) {
+        _viewState.update { currentViewState ->
+            val messages = currentViewState.userMessages.filterNot { it.uniqueId == messageId }
+            currentViewState.copy(userMessages = messages)
         }
     }
 }
