@@ -35,11 +35,13 @@ class ListOfShowsViewModel(
         object Error : ListOfShowsResponse()
     }
 
-    private val _viewState = MutableStateFlow(ListOfShowsViewState(null, true))
+    private val _viewState = MutableStateFlow(ListOfShowsViewState(null, false))
     val viewState = _viewState.asStateFlow()
 
     fun onResume() {
         viewModelScope.launch {
+            _viewState.value = ListOfShowsViewState(null, true)
+
             when (val response = fetchData()) {
                 is ListOfShowsResponse.Success -> {
                     _viewState.update { currentViewState ->
@@ -77,7 +79,7 @@ class ListOfShowsViewModel(
                     val pageResponse = dataFetcher.getSetlistData("rstockbridge", i)
 
                     if (pageResponse is Response.Success) {
-                        showData.addAll(page1Response.body.shows)
+                        showData.addAll(pageResponse.body.shows)
                     } else {
                         return@withContext ListOfShowsResponse.Error
                     }

@@ -9,6 +9,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import dev.rstockbridge.showstats2.api.SetlistfmApi
 import dev.rstockbridge.showstats2.ui.composables.ListOfShowsUi
@@ -40,16 +41,16 @@ class MainActivity : ComponentActivity() {
 fun Screen(
     viewModel: ListOfShowsViewModel,
 ) {
-    val viewState = viewModel.viewState.collectAsState()
+    val viewState by viewModel.viewState.collectAsState()
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
         modifier = Modifier,
         scaffoldState = scaffoldState
     ) {
-        ListOfShowsUi(viewState.value)
+        ListOfShowsUi(viewState)
 
-        viewState.value.userMessages.firstOrNull()?.let { userMessage ->
+        viewState.userMessages.firstOrNull()?.let { userMessage ->
             LaunchedEffect(userMessage) {
                 scaffoldState.snackbarHostState.showSnackbar(userMessage.message)
                 viewModel.userMessageShown(userMessage.uniqueId)
