@@ -3,4 +3,6 @@
     <string name="date">"Date: "</string>
     <string name="venue">"Venue: "</string>
     <string name="artist">"Artist: "</string>
+    <string name="map">Map</string>
+    <string name="shows">Shows</string>
 </resources>

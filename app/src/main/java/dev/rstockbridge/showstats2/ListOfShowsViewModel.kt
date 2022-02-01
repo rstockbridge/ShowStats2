@@ -38,11 +38,11 @@ class ListOfShowsViewModel(
     private val _viewState = MutableStateFlow(ListOfShowsViewState(null, false))
     val viewState = _viewState.asStateFlow()
 
-    fun onResume() {
+    fun fetchData(setlistfmId: String) {
         viewModelScope.launch {
             _viewState.value = ListOfShowsViewState(null, true)
 
-            when (val response = fetchData()) {
+            when (val response = makeNetworkRequest(setlistfmId)) {
                 is ListOfShowsResponse.Success -> {
                     _viewState.update { currentViewState ->
                         currentViewState.copy(
@@ -64,11 +64,11 @@ class ListOfShowsViewModel(
         }
     }
 
-    private suspend fun fetchData(): ListOfShowsResponse {
+    private suspend fun makeNetworkRequest(setlistfmId: String): ListOfShowsResponse {
         return withContext(contextProvider.IO) {
 
             val showData: ArrayList<Show> = arrayListOf()
-            val page1Response = dataFetcher.getSetlistData("rstockbridge", 1)
+            val page1Response = dataFetcher.getSetlistData(setlistfmId, 1)
 
             if (page1Response is Response.Success) {
                 showData.addAll(page1Response.body.shows)
@@ -76,7 +76,7 @@ class ListOfShowsViewModel(
 
                 for (i in 2..numberOfPages) {
                     delay(63L)
-                    val pageResponse = dataFetcher.getSetlistData("rstockbridge", i)
+                    val pageResponse = dataFetcher.getSetlistData(setlistfmId, i)
 
                     if (pageResponse is Response.Success) {
                         showData.addAll(pageResponse.body.shows)
@@ -104,7 +104,7 @@ class ListOfShowsViewModelFactory(
     private val contextProvider: CoroutineContextProvider,
     private val dataFetcher: DataFetcher
 ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ListOfShowsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return ListOfShowsViewModel(contextProvider, dataFetcher) as T
