@@ -82,7 +82,7 @@ fun TabbedScreen(
             startDestination = TabScreen.Map.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(TabScreen.Map.route) { MapScreen() }
+            composable(TabScreen.Map.route) { MapScreen(scaffoldState.snackbarHostState) }
             composable(TabScreen.Shows.route) { ListOfShowsScreen(scaffoldState.snackbarHostState) }
         }
     }

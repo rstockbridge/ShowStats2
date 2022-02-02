@@ -32,10 +32,13 @@ data class SetlistVenue(
 
 data class City(
     val name: String,
+    @field:Json(name = "coords")
     val coordinates: Coordinates
 )
 
 data class Coordinates(
+    @field:Json(name = "lat")
     val latitude: Double,
+    @field:Json(name = "long")
     val longitude: Double
 )
