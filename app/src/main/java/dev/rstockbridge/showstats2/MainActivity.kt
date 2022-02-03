@@ -46,35 +46,29 @@ fun TabbedScreen(
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
 
+    fun bottomNavOnClick(screen: TabScreen) = navController.navigate(screen.route) {
+        popUpTo(navController.graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
+    fun screenSelected(screen: TabScreen): Boolean =
+        currentDestination?.hierarchy?.any { it.route == screen.route } == true
+
     Scaffold(
         modifier = Modifier,
         scaffoldState = scaffoldState,
         bottomBar = {
-            BottomNavigation {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-                tabScreens.forEach { screen ->
-                    BottomNavigationItem(
-                        icon = {
-                            Icon(
-                                painterResource(id = screen.iconResourceId),
-                                contentDescription = null
-                            )
-                        },
-                        label = { Text(stringResource(screen.resourceId)) },
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                        onClick = {
-                            navController.navigate(screen.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
-                    )
-                }
-            }
+            BottomNavBar(
+                tabScreens = tabScreens,
+                screenSelected = ::screenSelected,
+                bottomNavOnClick = ::bottomNavOnClick
+            )
         }
     ) { innerPadding ->
         NavHost(
@@ -84,6 +78,29 @@ fun TabbedScreen(
         ) {
             composable(TabScreen.Map.route) { MapScreen(scaffoldState.snackbarHostState) }
             composable(TabScreen.Shows.route) { ListOfShowsScreen(scaffoldState.snackbarHostState) }
+        }
+    }
+}
+
+@Composable
+fun BottomNavBar(
+    tabScreens: List<TabScreen>,
+    screenSelected: (TabScreen) -> Boolean,
+    bottomNavOnClick: (TabScreen) -> Unit
+) {
+    BottomNavigation {
+        tabScreens.forEach { screen ->
+            BottomNavigationItem(
+                icon = {
+                    Icon(
+                        painterResource(id = screen.iconResourceId),
+                        contentDescription = null
+                    )
+                },
+                label = { Text(stringResource(screen.resourceId)) },
+                selected = screenSelected(screen),
+                onClick = { bottomNavOnClick(screen) }
+            )
         }
     }
 }
