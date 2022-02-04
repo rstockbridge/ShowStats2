@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -37,7 +38,6 @@ fun ListOfShowsScreen(snackbarHostState: SnackbarHostState) {
     val viewModel: ListOfShowsViewModel = viewModel(
         factory = ListOfShowsViewModelFactory(ProductionCoroutineContextProvider(), SetlistfmApi)
     )
-
     val viewState by viewModel.viewState.collectAsState()
 
     val setlistfmId = "rstockbridge"
@@ -55,8 +55,9 @@ fun ListOfShowsScreen(snackbarHostState: SnackbarHostState) {
     }
 
     viewState.userMessages.firstOrNull()?.let { userMessage ->
+        val stringResource = stringResource(userMessage.message)
         LaunchedEffect(userMessage) {
-            snackbarHostState.showSnackbar(userMessage.message)
+            snackbarHostState.showSnackbar(stringResource)
             viewModel.userMessageShown(userMessage.uniqueId)
         }
     }

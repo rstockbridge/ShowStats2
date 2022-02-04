@@ -8,4 +8,5 @@
     <string name="more">More</string>
     <string name="licenses">Licenses</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="error_message">Something has gone wrong!</string>
 </resources>

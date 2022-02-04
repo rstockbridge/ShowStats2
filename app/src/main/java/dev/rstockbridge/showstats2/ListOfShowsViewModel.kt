@@ -1,5 +1,6 @@
 package dev.rstockbridge.showstats2
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -21,7 +22,7 @@ class ListOfShowsViewModel(
 
     data class UserMessage(
         val uniqueId: String = UUID.randomUUID().toString(),
-        val message: String
+        @StringRes val message: Int
     )
 
     data class ListOfShowsViewState(
@@ -56,7 +57,7 @@ class ListOfShowsViewModel(
                         currentViewState.copy(
                             shows = null,
                             networkCallInProgress = false,
-                            userMessages = currentViewState.userMessages + UserMessage(message = "Something has gone wrong!")
+                            userMessages = currentViewState.userMessages + UserMessage(message = R.string.error_message)
                         )
                     }
                 }
