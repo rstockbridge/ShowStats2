@@ -5,4 +5,7 @@
     <string name="artist">"Artist: "</string>
     <string name="map">Map</string>
     <string name="shows">Shows</string>
+    <string name="more">More</string>
+    <string name="licenses">Licenses</string>
+    <string name="privacy_policy">Privacy Policy</string>
 </resources>

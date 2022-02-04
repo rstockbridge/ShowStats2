@@ -21,7 +21,6 @@ import dev.rstockbridge.showstats2.ProductionCoroutineContextProvider
 import dev.rstockbridge.showstats2.R
 import dev.rstockbridge.showstats2.api.SetlistfmApi
 import dev.rstockbridge.showstats2.api.models.City
-import kotlinx.coroutines.launch
 
 @Composable
 fun MapScreen(snackbarHostState: SnackbarHostState) {
