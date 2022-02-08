@@ -7,14 +7,10 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -26,8 +22,6 @@ import androidx.navigation.compose.rememberNavController
 import dev.rstockbridge.showstats2.ui.composables.ListOfShowsScreen
 import dev.rstockbridge.showstats2.ui.composables.MapScreen
 import dev.rstockbridge.showstats2.ui.theme.ShowStats2Theme
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalUriHandler
 
 class MainActivity : ComponentActivity() {
 
@@ -54,19 +48,22 @@ fun TabbedScreen(
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
 
-    fun bottomNavOnClick(screen: TabScreen) = navController.navigate(screen.route) {
-        popUpTo(navController.graph.findStartDestination().id) {
-            saveState = true
+    val bottomNavOnClick: (TabScreen) -> Unit = { screen ->
+        navController.navigate(screen.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
         }
-        launchSingleTop = true
-        restoreState = true
     }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    fun screenSelected(screen: TabScreen): Boolean =
+    val screenSelected: (TabScreen) -> Boolean = { screen ->
         currentDestination?.hierarchy?.any { it.route == screen.route } == true
+    }
 
     Scaffold(
         modifier = Modifier,
@@ -75,8 +72,8 @@ fun TabbedScreen(
         bottomBar = {
             BottomNavBar(
                 tabScreens = tabScreens,
-                screenSelected = ::screenSelected,
-                bottomNavOnClick = ::bottomNavOnClick
+                screenSelected = screenSelected,
+                bottomNavOnClick = bottomNavOnClick
             )
         }
     ) { innerPadding ->
