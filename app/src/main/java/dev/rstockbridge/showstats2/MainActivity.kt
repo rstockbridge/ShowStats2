@@ -1,5 +1,6 @@
 package dev.rstockbridge.showstats2
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dev.rstockbridge.showstats2.ui.composables.ListOfShowsScreen
 import dev.rstockbridge.showstats2.ui.composables.MapScreen
 import dev.rstockbridge.showstats2.ui.theme.ShowStats2Theme
@@ -33,9 +35,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val licensesOnClick: () -> Unit = {
+            startActivity(Intent(this, OssLicensesMenuActivity::class.java))
+        }
+
         setContent {
             ShowStats2Theme {
-                TabbedScreen(screens)
+                TabbedScreen(screens, licensesOnClick)
             }
         }
     }
@@ -43,7 +49,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TabbedScreen(
-    tabScreens: List<TabScreen>
+    tabScreens: List<TabScreen>,
+    licensesOnClick: () -> Unit
 ) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
@@ -68,7 +75,7 @@ fun TabbedScreen(
     Scaffold(
         modifier = Modifier,
         scaffoldState = scaffoldState,
-        topBar = { TopAppBar() },
+        topBar = { TopAppBar(licensesOnClick) },
         bottomBar = {
             BottomNavBar(
                 tabScreens = tabScreens,
@@ -89,7 +96,9 @@ fun TabbedScreen(
 }
 
 @Composable
-fun TopAppBar() {
+fun TopAppBar(
+    licensesOnClick: () -> Unit
+) {
     var showMenu by remember { mutableStateOf(false) }
     val uriHandler = LocalUriHandler.current
 
@@ -109,7 +118,7 @@ fun TopAppBar() {
                 onDismissRequest = { showMenu = false }
             ) {
                 DropdownMenuItem(
-                    onClick = { /*TODO*/ }
+                    onClick =  licensesOnClick
                 ) {
                     Text(stringResource(R.string.licenses))
                 }
