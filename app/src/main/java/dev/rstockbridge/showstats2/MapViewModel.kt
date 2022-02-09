@@ -25,13 +25,13 @@ class MapViewModel(
     )
 
     data class CitiesViewState(
-        val cities: Set<City>?,
+        val cities: List<City>?,
         val networkCallInProgress: Boolean,
         val userMessages: List<UserMessage> = emptyList()
     )
 
     sealed class CitiesResponse {
-        data class Success(val cities: Set<City>) : CitiesResponse()
+        data class Success(val cities: List<City>) : CitiesResponse()
         object Error : CitiesResponse()
     }
 
@@ -89,7 +89,7 @@ class MapViewModel(
                     }
                 }
 
-                return@withContext CitiesResponse.Success(cities)
+                return@withContext CitiesResponse.Success(cities.toList())
             } else {
                 return@withContext CitiesResponse.Error
             }
