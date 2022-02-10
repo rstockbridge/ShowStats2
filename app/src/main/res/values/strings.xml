@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">ShowStats2</string>
+    <string name="enter_user_id">Enter Setlist.fm User ID:</string>
     <string name="date">"Date: "</string>
     <string name="venue">"Venue: "</string>
     <string name="artist">"Artist: "</string>
     <string name="map">Map</string>
     <string name="shows">Shows</string>
     <string name="more">More</string>
+    <string name="switch_user_id">Switch User ID</string>
     <string name="licenses">Licenses</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="error_message">Something has gone wrong!</string>
+    <string name="go">Go</string>
 </resources>

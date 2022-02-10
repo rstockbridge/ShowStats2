@@ -1,6 +1,5 @@
 package dev.rstockbridge.showstats2
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -15,49 +14,56 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class ListOfShowsViewModel(
+class FetchDataViewModel(
     private val contextProvider: CoroutineContextProvider,
     private val dataFetcher: DataFetcher
 ) : ViewModel() {
 
     data class UserMessage(
         val uniqueId: String = UUID.randomUUID().toString(),
-        @StringRes val message: Int
+        val message: String
     )
 
-    data class ListOfShowsViewState(
+    data class ViewState(
         val shows: List<Show>?,
-        val networkCallInProgress: Boolean,
+        val displayProgressBar: Boolean,
         val userMessages: List<UserMessage> = emptyList()
     )
 
-    sealed class ListOfShowsResponse {
-        data class Success(val listOfShows: List<Show>) : ListOfShowsResponse()
-        object Error : ListOfShowsResponse()
+    sealed class DataResponse {
+        data class Success(val shows: List<Show>) : DataResponse()
+        object Error : DataResponse()
     }
 
-    private val _viewState = MutableStateFlow(ListOfShowsViewState(null, false))
+    private val _viewState = MutableStateFlow(ViewState(null, false))
     val viewState = _viewState.asStateFlow()
 
-    fun fetchData(setlistfmId: String) {
+    fun onSetlistfmIdSubmitted(setlistfmId: String) {
+        fetchData(setlistfmId)
+    }
+
+    private fun fetchData(setlistfmId: String) {
         viewModelScope.launch {
-            _viewState.value = ListOfShowsViewState(null, true)
+            _viewState.value = ViewState(
+                shows = null,
+                displayProgressBar = true,
+            )
 
             when (val response = makeNetworkRequest(setlistfmId)) {
-                is ListOfShowsResponse.Success -> {
+                is DataResponse.Success -> {
                     _viewState.update { currentViewState ->
                         currentViewState.copy(
-                            shows = response.listOfShows,
-                            networkCallInProgress = false
+                            shows = response.shows,
+                            displayProgressBar = true,
                         )
                     }
                 }
-                ListOfShowsResponse.Error -> {
+                DataResponse.Error -> {
                     _viewState.update { currentViewState ->
                         currentViewState.copy(
                             shows = null,
-                            networkCallInProgress = false,
-                            userMessages = currentViewState.userMessages + UserMessage(message = R.string.error_message)
+                            displayProgressBar = false,
+                            userMessages = currentViewState.userMessages + UserMessage(message = "Something has gone wrong!")
                         )
                     }
                 }
@@ -65,14 +71,14 @@ class ListOfShowsViewModel(
         }
     }
 
-    private suspend fun makeNetworkRequest(setlistfmId: String): ListOfShowsResponse {
+    private suspend fun makeNetworkRequest(setlistfmId: String): DataResponse {
         return withContext(contextProvider.IO) {
 
-            val showData: ArrayList<Show> = arrayListOf()
+            val shows: MutableList<Show> = mutableListOf()
             val page1Response = dataFetcher.getSetlistData(setlistfmId, 1)
 
             if (page1Response is Response.Success) {
-                showData.addAll(page1Response.body.shows)
+                shows.addAll(page1Response.body.shows)
                 val numberOfPages = page1Response.body.numberOfPages
 
                 for (i in 2..numberOfPages) {
@@ -80,15 +86,15 @@ class ListOfShowsViewModel(
                     val pageResponse = dataFetcher.getSetlistData(setlistfmId, i)
 
                     if (pageResponse is Response.Success) {
-                        showData.addAll(pageResponse.body.shows)
+                        shows.addAll(pageResponse.body.shows)
                     } else {
-                        return@withContext ListOfShowsResponse.Error
+                        return@withContext DataResponse.Error
                     }
                 }
 
-                return@withContext ListOfShowsResponse.Success(showData)
+                return@withContext DataResponse.Success(shows)
             } else {
-                return@withContext ListOfShowsResponse.Error
+                return@withContext DataResponse.Error
             }
         }
     }
@@ -101,15 +107,15 @@ class ListOfShowsViewModel(
     }
 }
 
-class ListOfShowsViewModelFactory(
+class UserNameViewModelFactory(
     private val contextProvider: CoroutineContextProvider,
     private val dataFetcher: DataFetcher
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ListOfShowsViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(FetchDataViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ListOfShowsViewModel(contextProvider, dataFetcher) as T
+            return FetchDataViewModel(contextProvider, dataFetcher) as T
         }
-        throw IllegalArgumentException("Unable to construct ListOfShowsViewModel")
+        throw IllegalArgumentException("Unable to construct UserNameViewModel")
     }
 }
