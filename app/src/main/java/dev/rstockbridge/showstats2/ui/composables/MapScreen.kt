@@ -1,6 +1,7 @@
 package dev.rstockbridge.showstats2.ui.composables
 
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
@@ -21,6 +22,9 @@ fun MapScreen(cities: List<City>) {
 
 @Composable
 private fun GoogleMapView(cities: List<City>) {
+    val cameraHasBeenAnimated = rememberSaveable {
+        mutableStateOf(false)
+    }
 
     val initialCameraPosition = CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 1f)
 
@@ -55,12 +59,15 @@ private fun GoogleMapView(cities: List<City>) {
                 }
 
                 val bounds = builder.build()
-                cameraPositionState.animate(
-                    CameraUpdateFactory.newLatLngBounds(
-                        bounds,
-                        (0.1 * screenHeight).toInt()
+                if (!cameraHasBeenAnimated.value) {
+                    cameraPositionState.animate(
+                        CameraUpdateFactory.newLatLngBounds(
+                            bounds,
+                            (0.1 * screenHeight).toInt()
+                        )
                     )
-                )
+                }
+                cameraHasBeenAnimated.value = true
             }
         },
         googleMapOptionsFactory = {
