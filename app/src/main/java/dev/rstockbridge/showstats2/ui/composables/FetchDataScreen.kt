@@ -1,12 +1,15 @@
 package dev.rstockbridge.showstats2.ui.composables
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -72,11 +75,22 @@ fun EnterSetlistfmId(goButtonOnClick: (String) -> Unit) {
                 colors = TextFieldDefaults.textFieldColors(
                     cursorColor = Purple,
                     focusedIndicatorColor = Purple
-                )
+                ),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+                keyboardActions = KeyboardActions(
+                    onGo = {
+                        if (text.isNotEmpty()) {
+                            goButtonOnClick(text)
+                        }
+                    })
             )
 
             Button(
-                onClick = { goButtonOnClick(text) }
+                onClick = {
+                    if (text.isNotEmpty()) {
+                        goButtonOnClick(text)
+                    }
+                }
             ) {
                 Text(
                     text = stringResource(R.string.go),
