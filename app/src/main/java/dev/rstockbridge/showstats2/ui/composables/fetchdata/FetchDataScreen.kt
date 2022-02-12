@@ -1,4 +1,4 @@
-package dev.rstockbridge.showstats2.ui.composables
+package dev.rstockbridge.showstats2.ui.composables.fetchdata
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions

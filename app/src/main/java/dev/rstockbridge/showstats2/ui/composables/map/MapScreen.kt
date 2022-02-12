@@ -1,4 +1,4 @@
-package dev.rstockbridge.showstats2.ui.composables
+package dev.rstockbridge.showstats2.ui.composables.map
 
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable

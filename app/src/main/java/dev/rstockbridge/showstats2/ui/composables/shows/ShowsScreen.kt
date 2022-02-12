@@ -1,4 +1,4 @@
-package dev.rstockbridge.showstats2.ui.composables
+package dev.rstockbridge.showstats2.ui.composables.shows
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
