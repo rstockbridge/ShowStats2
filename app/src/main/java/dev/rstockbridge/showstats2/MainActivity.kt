@@ -72,7 +72,8 @@ fun MainScreen(
 
     val bottomNavOnClick: (TabScreen) -> Unit = { screen ->
         navController.navigate(screen.route) {
-            popUpTo(navController.graph.findStartDestination().id) {
+            popUpTo(navController.currentDestination!!.id) {
+                inclusive = true
                 saveState = true
             }
             launchSingleTop = true
