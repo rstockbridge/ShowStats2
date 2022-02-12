@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.rstockbridge.showstats2.R
 import dev.rstockbridge.showstats2.api.models.Show
+import dev.rstockbridge.showstats2.ui.theme.Purple
 
 @Composable
 fun ShowsScreen(shows: List<Show>) {
@@ -80,7 +81,7 @@ fun AnnotatedClickableText(artistName: String, url: String) {
         withStyle(
             style = SpanStyle(
                 fontSize = 16.sp,
-                color = Color.Magenta,
+                color = Purple,
                 textDecoration = TextDecoration.Underline
             )
         ) {

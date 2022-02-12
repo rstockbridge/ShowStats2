@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.rstockbridge.showstats2.ui.theme.Purple
 
 @Composable
 fun ProgressBar() {
@@ -19,7 +20,8 @@ fun ProgressBar() {
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(100.dp),
+            color = Purple
         )
     }
 }

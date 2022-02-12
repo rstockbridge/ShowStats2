@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -30,6 +31,7 @@ import dev.rstockbridge.showstats2.api.models.Show
 import dev.rstockbridge.showstats2.ui.composables.ShowsScreen
 import dev.rstockbridge.showstats2.ui.composables.MapScreen
 import dev.rstockbridge.showstats2.ui.composables.FetchDataScreen
+import dev.rstockbridge.showstats2.ui.theme.DarkerGreen
 import dev.rstockbridge.showstats2.ui.theme.ShowStats2Theme
 
 class MainActivity : ComponentActivity() {
@@ -42,6 +44,8 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            this.window.statusBarColor = ContextCompat.getColor(this, R.color.darker_green)
+
             ShowStats2Theme {
                 MainScreen(
                     licensesOnClick,

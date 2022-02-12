@@ -14,6 +14,7 @@ import dev.rstockbridge.showstats2.*
 import dev.rstockbridge.showstats2.R
 import dev.rstockbridge.showstats2.api.SetlistfmApi
 import dev.rstockbridge.showstats2.api.models.Show
+import dev.rstockbridge.showstats2.ui.theme.Purple
 
 @Composable
 fun FetchDataScreen(
@@ -68,6 +69,10 @@ fun EnterSetlistfmId(goButtonOnClick: (String) -> Unit) {
                 value = text,
                 onValueChange = { text = it },
                 singleLine = true,
+                colors = TextFieldDefaults.textFieldColors(
+                    cursorColor = Purple,
+                    focusedIndicatorColor = Purple
+                )
             )
 
             Button(
