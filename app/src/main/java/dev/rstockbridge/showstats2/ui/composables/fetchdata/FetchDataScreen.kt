@@ -1,6 +1,7 @@
 package dev.rstockbridge.showstats2.ui.composables.fetchdata
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -8,8 +9,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -99,4 +106,55 @@ fun EnterSetlistfmId(goButtonOnClick: (String) -> Unit) {
             }
         }
     }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(1f)
+            .fillMaxHeight(1f), contentAlignment = Alignment.BottomCenter
+    ) {
+        AnnotatedSetlistfmClickableText(Modifier.padding(0.dp, 0.dp, 0.dp, 16.dp))
+    }
+}
+
+@Composable
+fun AnnotatedSetlistfmClickableText(
+    modifier: Modifier = Modifier
+) {
+    val annotatedText = buildAnnotatedString {
+        withStyle(style = SpanStyle(fontSize = 20.sp)) {
+            append(stringResource(R.string.powered_by))
+        }
+
+        pushStringAnnotation(
+            tag = "URL",
+            annotation = "https://www.setlist.fm/"
+        )
+        withStyle(
+            style = SpanStyle(
+                fontSize = 20.sp,
+                color = Purple,
+                textDecoration = TextDecoration.Underline
+            )
+        ) {
+            append("setlist.fm")
+        }
+
+        pop()
+    }
+
+    val uriHandler = LocalUriHandler.current
+
+    ClickableText(
+        modifier = modifier,
+        text = annotatedText,
+        onClick = { offset ->
+            annotatedText.getStringAnnotations(
+                tag = "URL", start = offset,
+                end = offset
+            )
+                .firstOrNull()?.let { annotation ->
+                    uriHandler.openUri(annotation.item)
+                }
+        }
+    )
 }

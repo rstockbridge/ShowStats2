@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ShowStats2</string>
-    <string name="enter_user_id">Enter Setlist.fm User ID:</string>
+    <string name="enter_user_id">Enter setlist.fm User ID:</string>
+    <string name="powered_by">"Powered by "</string>
     <string name="date">"Date: "</string>
     <string name="venue">"Venue: "</string>
     <string name="artist">"Artist: "</string>

@@ -68,12 +68,12 @@ fun Show(show: Show) {
             },
             fontSize = 16.sp
         )
-        AnnotatedClickableText(show.artist.name, show.url)
+        AnnotatedArtistClickableText(show.artist.name, show.url)
     }
 }
 
 @Composable
-fun AnnotatedClickableText(artistName: String, url: String) {
+fun AnnotatedArtistClickableText(artistName: String, url: String) {
     val annotatedText = buildAnnotatedString {
         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)) {
             append(stringResource(R.string.artist))
