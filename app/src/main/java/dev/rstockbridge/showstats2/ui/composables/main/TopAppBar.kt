@@ -52,12 +52,16 @@ fun TopAppBar(
                             Text(stringResource(R.string.switch_user_id))
                         }
                         DropdownMenuItem(
-                            onClick = licensesOnClick
+                            onClick = {
+                                showMenu = false
+                                licensesOnClick()
+                            }
                         ) {
                             Text(stringResource(R.string.licenses))
                         }
                         DropdownMenuItem(
                             onClick = {
+                                showMenu = false
                                 uriHandler.openUri("https://github.com/rstockbridge/ShowStats2/blob/main/privacy_policy.md")
                             }
                         ) {
