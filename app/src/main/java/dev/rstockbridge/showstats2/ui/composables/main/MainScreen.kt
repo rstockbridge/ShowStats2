@@ -25,7 +25,7 @@ fun MainScreen(
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
 
-    var showList by remember { mutableStateOf(emptyList<Show>()) }
+    var showList by rememberSaveable { mutableStateOf(emptyList<Show>()) }
 
     val switchUserIdOnClick: () -> Unit = {
         navController.navigate("FetchDataScreen") {

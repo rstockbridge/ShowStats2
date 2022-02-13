@@ -17,7 +17,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MapScreen(cities: List<City>) {
-    GoogleMapView(cities)
+    val savedCities = rememberSaveable {
+        mutableStateOf(cities)
+    }
+
+    GoogleMapView(savedCities.value)
 }
 
 @Composable

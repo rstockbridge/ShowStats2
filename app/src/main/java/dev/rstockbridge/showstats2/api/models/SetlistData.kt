@@ -1,6 +1,8 @@
 package dev.rstockbridge.showstats2.api.models
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
+import kotlinx.parcelize.Parcelize
 import kotlin.math.ceil
 
 data class SetlistData(
@@ -14,31 +16,36 @@ data class SetlistData(
         get() = ceil((numberOfSetlists.toDouble()) / (itemsPerPage.toDouble())).toInt()
 }
 
+@Parcelize
 data class Show(
     val eventDate: String,
     val artist: SetlistArtist,
     val venue: SetlistVenue,
     val url: String
-)
+) : Parcelable
 
+@Parcelize
 data class SetlistArtist(
     val name: String
-)
+) : Parcelable
 
+@Parcelize
 data class SetlistVenue(
     val name: String,
     val city: City
-)
+) : Parcelable
 
+@Parcelize
 data class City(
     val name: String,
     @field:Json(name = "coords")
     val coordinates: Coordinates
-)
+) : Parcelable
 
+@Parcelize
 data class Coordinates(
     @field:Json(name = "lat")
     val latitude: Double,
     @field:Json(name = "long")
     val longitude: Double
-)
+) : Parcelable

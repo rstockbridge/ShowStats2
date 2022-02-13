@@ -1,6 +1,5 @@
 package dev.rstockbridge.showstats2.ui.composables.fetchdata
 
-import android.content.res.Resources
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -16,15 +15,16 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.rstockbridge.showstats2.*
+import dev.rstockbridge.showstats2.FetchDataViewModel
+import dev.rstockbridge.showstats2.ProductionCoroutineContextProvider
 import dev.rstockbridge.showstats2.R
+import dev.rstockbridge.showstats2.UserNameViewModelFactory
 import dev.rstockbridge.showstats2.api.SetlistfmApi
 import dev.rstockbridge.showstats2.api.models.Show
 import dev.rstockbridge.showstats2.ui.theme.Purple

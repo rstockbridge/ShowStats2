@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
@@ -28,7 +30,11 @@ import dev.rstockbridge.showstats2.ui.theme.Purple
 
 @Composable
 fun ShowsScreen(shows: List<Show>) {
-    Shows(shows)
+    val savedShows = rememberSaveable {
+        mutableStateOf(shows)
+    }
+
+    Shows(savedShows.value)
 }
 
 @Composable
