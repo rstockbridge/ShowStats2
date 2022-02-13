@@ -1,5 +1,7 @@
 package dev.rstockbridge.showstats2.ui.composables.fetchdata
 
+import android.content.res.Resources
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
@@ -9,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -121,7 +124,16 @@ fun AnnotatedSetlistfmClickableText(
     modifier: Modifier = Modifier
 ) {
     val annotatedText = buildAnnotatedString {
-        withStyle(style = SpanStyle(fontSize = 20.sp)) {
+        withStyle(
+            style = SpanStyle(
+                fontSize = 20.sp,
+                color = if (isSystemInDarkTheme()) {
+                    Color.White
+                } else {
+                    Color.Black
+                }
+            )
+        ) {
             append(stringResource(R.string.powered_by))
         }
 

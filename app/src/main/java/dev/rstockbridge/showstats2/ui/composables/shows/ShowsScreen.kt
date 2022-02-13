@@ -1,5 +1,6 @@
 package dev.rstockbridge.showstats2.ui.composables.shows
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -75,7 +77,17 @@ fun Show(show: Show) {
 @Composable
 fun AnnotatedArtistClickableText(artistName: String, url: String) {
     val annotatedText = buildAnnotatedString {
-        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)) {
+        withStyle(
+            style = SpanStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = if (isSystemInDarkTheme()) {
+                    Color.White
+                } else {
+                    Color.Black
+                }
+            )
+        ) {
             append(stringResource(R.string.artist))
         }
 
