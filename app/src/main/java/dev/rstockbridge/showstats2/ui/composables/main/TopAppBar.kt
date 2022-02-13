@@ -58,7 +58,7 @@ fun TopAppBar(
                         }
                         DropdownMenuItem(
                             onClick = {
-                                uriHandler.openUri("https://github.com/rstockbridge/ShowStats/blob/main/playstore/privacy_policy.md")
+                                uriHandler.openUri("https://github.com/rstockbridge/ShowStats2/blob/main/privacy_policy.md")
                             }
                         ) {
                             Text(stringResource(R.string.privacy_policy))
