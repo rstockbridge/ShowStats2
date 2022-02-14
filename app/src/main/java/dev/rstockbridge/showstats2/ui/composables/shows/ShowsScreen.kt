@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -25,7 +26,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.rstockbridge.showstats2.R
-import dev.rstockbridge.showstats2.api.models.Show
+import dev.rstockbridge.showstats2.api.models.Setlist
+import dev.rstockbridge.showstats2.appmodels.Show
 import dev.rstockbridge.showstats2.ui.theme.Purple
 
 @Composable
@@ -76,12 +78,14 @@ fun Show(show: Show) {
             },
             fontSize = 16.sp
         )
-        AnnotatedArtistClickableText(show.artist.name, show.url)
+        AnnotatedArtistClickableText(show.getArtistNames(), show.getUrls())
     }
 }
 
 @Composable
-fun AnnotatedArtistClickableText(artistName: String, url: String) {
+fun AnnotatedArtistClickableText(artistNames: List<String>, urls: List<String>) {
+    val resources = LocalContext.current.resources
+
     val annotatedText = buildAnnotatedString {
         withStyle(
             style = SpanStyle(
@@ -94,24 +98,37 @@ fun AnnotatedArtistClickableText(artistName: String, url: String) {
                 }
             )
         ) {
-            append(stringResource(R.string.artist))
-        }
-
-        pushStringAnnotation(
-            tag = "URL",
-            annotation = url
-        )
-        withStyle(
-            style = SpanStyle(
-                fontSize = 16.sp,
-                color = Purple,
-                textDecoration = TextDecoration.Underline
+            append(
+                resources.getQuantityString(
+                    R.plurals.artist_plural,
+                    artistNames.size
+                )
             )
-        ) {
-            append(artistName)
         }
 
-        pop()
+        for (i in artistNames.indices) {
+            val artistName = artistNames[i]
+            val url = urls[i]
+
+            pushStringAnnotation(
+                tag = "URL",
+                annotation = url
+            )
+            withStyle(
+                style = SpanStyle(
+                    fontSize = 16.sp,
+                    color = Purple,
+                    textDecoration = TextDecoration.Underline
+                )
+            ) {
+                append(artistName)
+                if (i < artistNames.size - 1) {
+                    append("\n")
+                }
+            }
+
+            pop()
+        }
     }
 
     val uriHandler = LocalUriHandler.current

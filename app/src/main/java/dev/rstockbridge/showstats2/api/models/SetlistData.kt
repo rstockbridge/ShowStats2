@@ -7,7 +7,7 @@ import kotlin.math.ceil
 
 data class SetlistData(
     @field:Json(name = "setlist")
-    val shows: List<Show>,
+    val setlists: List<Setlist>,
     private val itemsPerPage: Int,
     @field:Json(name = "total")
     private val numberOfSetlists: Int
@@ -17,7 +17,7 @@ data class SetlistData(
 }
 
 @Parcelize
-data class Show(
+data class Setlist(
     val eventDate: String,
     val artist: SetlistArtist,
     val venue: SetlistVenue,
@@ -26,6 +26,7 @@ data class Show(
 
 @Parcelize
 data class SetlistArtist(
+    val mbid: String,
     val name: String
 ) : Parcelable
 

@@ -26,13 +26,13 @@ import dev.rstockbridge.showstats2.ProductionCoroutineContextProvider
 import dev.rstockbridge.showstats2.R
 import dev.rstockbridge.showstats2.UserNameViewModelFactory
 import dev.rstockbridge.showstats2.api.SetlistfmApi
-import dev.rstockbridge.showstats2.api.models.Show
+import dev.rstockbridge.showstats2.api.models.Setlist
 import dev.rstockbridge.showstats2.ui.theme.Purple
 
 @Composable
 fun FetchDataScreen(
     snackbarHostState: SnackbarHostState,
-    onDataLoaded: (List<Show>) -> Unit
+    onDataLoaded: (List<Setlist>) -> Unit
 ) {
     val viewModel: FetchDataViewModel = viewModel(
         factory = UserNameViewModelFactory(ProductionCoroutineContextProvider(), SetlistfmApi)

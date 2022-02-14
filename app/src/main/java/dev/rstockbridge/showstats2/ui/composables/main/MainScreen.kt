@@ -13,7 +13,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dev.rstockbridge.showstats2.TabScreen
 import dev.rstockbridge.showstats2.api.models.City
-import dev.rstockbridge.showstats2.api.models.Show
+import dev.rstockbridge.showstats2.api.models.Setlist
+import dev.rstockbridge.showstats2.appmodels.Show
+import dev.rstockbridge.showstats2.appmodels.constructShowsFromSetlists
 import dev.rstockbridge.showstats2.ui.composables.fetchdata.FetchDataScreen
 import dev.rstockbridge.showstats2.ui.composables.map.MapScreen
 import dev.rstockbridge.showstats2.ui.composables.shows.ShowsScreen
@@ -44,8 +46,8 @@ fun MainScreen(
         }
     }
 
-    val onDataLoaded: (List<Show>) -> Unit = { shows ->
-        showList = shows
+    val onDataLoaded: (List<Setlist>) -> Unit = { setlists ->
+        showList = constructShowsFromSetlists(setlists)
         navController.navigate(TabScreen.Map.route) {
             popUpTo("FetchDataScreen") { inclusive = true }
         }

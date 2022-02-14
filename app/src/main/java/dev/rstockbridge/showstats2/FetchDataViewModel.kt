@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import dev.rstockbridge.showstats2.api.DataFetcher
 import dev.rstockbridge.showstats2.api.Response
-import dev.rstockbridge.showstats2.api.models.Show
+import dev.rstockbridge.showstats2.api.models.Setlist
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,13 +25,13 @@ class FetchDataViewModel(
     )
 
     data class ViewState(
-        val shows: List<Show>?,
+        val shows: List<Setlist>?,
         val displayProgressBar: Boolean,
         val userMessages: List<UserMessage> = emptyList()
     )
 
     sealed class DataResponse {
-        data class Success(val shows: List<Show>) : DataResponse()
+        data class Success(val shows: List<Setlist>) : DataResponse()
         object Error : DataResponse()
     }
 
@@ -74,11 +74,11 @@ class FetchDataViewModel(
     private suspend fun makeNetworkRequest(setlistfmId: String): DataResponse {
         return withContext(contextProvider.IO) {
 
-            val shows: MutableList<Show> = mutableListOf()
+            val shows: MutableList<Setlist> = mutableListOf()
             val page1Response = dataFetcher.getSetlistData(setlistfmId, 1)
 
             if (page1Response is Response.Success) {
-                shows.addAll(page1Response.body.shows)
+                shows.addAll(page1Response.body.setlists)
                 val numberOfPages = page1Response.body.numberOfPages
 
                 for (i in 2..numberOfPages) {
@@ -86,7 +86,7 @@ class FetchDataViewModel(
                     val pageResponse = dataFetcher.getSetlistData(setlistfmId, i)
 
                     if (pageResponse is Response.Success) {
-                        shows.addAll(pageResponse.body.shows)
+                        shows.addAll(pageResponse.body.setlists)
                     } else {
                         return@withContext DataResponse.Error
                     }
