@@ -7,9 +7,11 @@ import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import dagger.hilt.android.AndroidEntryPoint
 import dev.rstockbridge.showstats2.ui.composables.main.MainScreen
 import dev.rstockbridge.showstats2.ui.theme.ShowStats2Theme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -20,12 +20,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import dev.rstockbridge.showstats2.FetchDataViewModel
-import dev.rstockbridge.showstats2.ProductionCoroutineContextProvider
 import dev.rstockbridge.showstats2.R
-import dev.rstockbridge.showstats2.UserNameViewModelFactory
-import dev.rstockbridge.showstats2.api.SetlistfmApi
 import dev.rstockbridge.showstats2.api.models.Setlist
 import dev.rstockbridge.showstats2.ui.theme.Purple
 
@@ -34,9 +31,7 @@ fun FetchDataScreen(
     snackbarHostState: SnackbarHostState,
     onDataLoaded: (List<Setlist>) -> Unit
 ) {
-    val viewModel: FetchDataViewModel = viewModel(
-        factory = UserNameViewModelFactory(ProductionCoroutineContextProvider(), SetlistfmApi)
-    )
+    val viewModel = hiltViewModel<FetchDataViewModel>()
 
     val viewState by viewModel.viewState.collectAsState()
 

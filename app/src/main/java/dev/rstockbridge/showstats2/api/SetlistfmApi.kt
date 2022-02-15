@@ -2,8 +2,9 @@ package dev.rstockbridge.showstats2.api
 
 import dev.rstockbridge.showstats2.api.models.SetlistData
 import java.io.IOException
+import javax.inject.Inject
 
-object SetlistfmApi : DataFetcher {
+class SetlistfmApi @Inject constructor() : DataFetcher {
 
     private val service: SetlistfmService =
         RetrofitWrapper.retrofit.create(SetlistfmService::class.java)

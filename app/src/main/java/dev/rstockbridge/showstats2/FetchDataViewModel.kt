@@ -3,6 +3,7 @@ package dev.rstockbridge.showstats2
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.rstockbridge.showstats2.api.DataFetcher
 import dev.rstockbridge.showstats2.api.Response
 import dev.rstockbridge.showstats2.api.models.Setlist
@@ -13,8 +14,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
+import javax.inject.Inject
 
-class FetchDataViewModel(
+@HiltViewModel
+class FetchDataViewModel @Inject constructor(
     private val contextProvider: CoroutineContextProvider,
     private val dataFetcher: DataFetcher
 ) : ViewModel() {
@@ -104,18 +107,5 @@ class FetchDataViewModel(
             val messages = currentViewState.userMessages.filterNot { it.uniqueId == messageId }
             currentViewState.copy(userMessages = messages)
         }
-    }
-}
-
-class UserNameViewModelFactory(
-    private val contextProvider: CoroutineContextProvider,
-    private val dataFetcher: DataFetcher
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(FetchDataViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return FetchDataViewModel(contextProvider, dataFetcher) as T
-        }
-        throw IllegalArgumentException("Unable to construct UserNameViewModel")
     }
 }
